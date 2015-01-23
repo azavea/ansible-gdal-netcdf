@@ -1,0 +1,19 @@
+---
+# defaults file for ansible-gdal-netcdf
+
+# These URL\versions are tooled to reading the NASA NEX climate data
+# netCDF files...there was a lot of debugging that went into finding
+# a version configuraiton that worked to read those netCDF files
+# efficiently across a MackBook and Ubuntu machine. In other words:
+# mess with these versions at your own peril.
+
+sources_dir: /usr/local/src
+build_prefix: /usr/local
+
+szip_url: http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
+hdf5_url: http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.12/src/hdf5-1.8.12.tar.bz2
+netcdf_url: http://www.gfd-dennou.org/library/netcdf/unidata-mirror/netcdf-4.3.2.tar.gz
+
+gdal_git_branch: 950849f98ceba0dcdaa0677abe59411caf3329b8
+gdal_git_url: https://github.com/OSGeo/gdal.git
+

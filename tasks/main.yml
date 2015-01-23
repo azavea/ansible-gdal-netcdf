@@ -1,0 +1,73 @@
+---
+# tasks file for ansible-gdal-netcdf
+
+- name: Install system packages
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - g++
+    - libpng12-dev
+    - libjpeg-dev
+    - libtiff5-dev
+    - libgeotiff-dev
+    - libproj-dev
+    - libgeos-dev
+    - libproj-dev
+
+# SZIP
+- name: Download szip
+  get_url: url={{ szip_url }} dest={{ sources_dir }}/szip-sources.tar.gz
+
+- name: Make szip-sources directory
+  file: path={{ sources_dir }}/szip-sources state=directory
+
+- name: Extract szip
+  command: tar xf {{ sources_dir }}/szip-sources.tar.gz -C {{ sources_dir }}/szip-sources --strip-components=1
+
+- name: Build and install szip
+  shell: 'cd {{ sources_dir }}/szip-sources ; {{ item }}'
+  with_items:
+    - ./configure --disable-debug --disable-dependency-tracking --prefix={{ build_prefix }}
+    - make install
+
+# HDF5
+- name: Download hdf5
+  get_url: url={{ hdf5_url }} dest={{ sources_dir }}/hdf5-sources.tar.bz2
+
+- name: Make hdf5-sources directory
+  file: path={{ sources_dir }}/hdf5-sources state=directory
+
+- name: Extract hdf5
+  command: tar xf {{ sources_dir }}/hdf5-sources.tar.bz2 -C {{ sources_dir}}/hdf5-sources --strip-components=1
+
+- name: Build and install hdf5
+  shell: 'cd {{ sources_dir }}/hdf5-sources ; {{ item }}'
+  with_items:
+    - ./configure --prefix={{ build_prefix }} --enable-production --enable-debug=no --disable-dependency-tracking --with-zlib=/usr --with-szlib=/usr/local --enable-filters=all --enable-static=yes --enable-shared=yes
+    - make install
+
+# NETCDF
+- name: Download netcdf
+  get_url: url={{ netcdf_url }} dest={{ sources_dir }}/netcdf-sources.tar.gz
+
+- name: Make netcdf-sources directory
+  file: path={{ sources_dir }}/netcdf-sources state=directory
+
+- name: Extract netcdf
+  command: tar xf {{ sources_dir }}/netcdf-sources.tar.gz -C {{ sources_dir }}/netcdf-sources --strip-components=1
+
+- name: Build and install netcdf
+  shell: 'cd {{ sources_dir }}/netcdf-sources ; {{ item }}'
+  with_items:
+    - ./configure --disable-dependency-tracking --disable-dap-remote-tests --prefix={{ build_prefix }} --enable-static --enable-shared --enable-netcdf4 --disable-doxygen
+    - make install
+
+# GDAL
+- name: Checkout GDAL
+  git: repo={{ gdal_git_url }} version={{ gdal_git_branch }} dest={{ sources_dir }}/gdal
+
+- name: Build GDAL with python support
+  shell: 'cd {{ sources_dir }}/gdal/gdal; {{ item }}'
+  with_items:
+    - ./configure --with-python
+    - make
+    - make install
