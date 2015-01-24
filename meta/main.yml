@@ -5,11 +5,11 @@ galaxy_info:
   company: Azavea Inc.
   license: Apache
   min_ansible_version: 1.2
-platforms:
+  platforms:
   - name: Ubuntu
     versions:
-      - trusty
-      - precise
+    - trusty
+    - precise
   categories:
   - development
 dependencies:
