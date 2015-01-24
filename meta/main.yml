@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: Rob Emanuele
-  description: An ansible role for installing GDAL with python bindings that can read netCDF files.
+  description: An Ansible role for installing GDAL with Python bindings to read NetCDF files.
   company: Azavea Inc.
   license: Apache
   min_ansible_version: 1.5
